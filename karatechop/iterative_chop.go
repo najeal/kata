@@ -1,7 +1,10 @@
-package kata
+package karatechop
 
-// chop searches the target in the sorted array source
-func chop(target int, source []int) int {
+// IterativeChop implements an iterative chop method
+type IterativeChop struct{}
+
+// Chop searches the target in the sorted array source
+func (rc *IterativeChop) Chop(target int, source []int) int {
 	min := 0
 	max := len(source) - 1
 	for min <= max {
