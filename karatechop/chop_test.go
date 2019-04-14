@@ -2,6 +2,20 @@ package karatechop
 
 import "testing"
 
+func chopBenchmarkGeneric(b *testing.B, chopMethod ChopMethod) {
+	array := []int{1, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+	for i := 0; i < b.N; i++ {
+		chopMethod.Chop(20, array)
+	}
+}
+
+func chopBenchmarkGenericLong(b *testing.B, chopMethod ChopMethod) {
+	array := make([]int, 10000)
+	for i := 0; i < b.N; i++ {
+		chopMethod.Chop(20, array)
+	}
+}
+
 // ChopTestGeneric tests the Chop function for a given  ChopMethod
 func chopTestGeneric(t *testing.T, chopMethod ChopMethod) {
 	array := []int{}
