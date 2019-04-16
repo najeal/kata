@@ -14,4 +14,19 @@ func TestChopFactory(t *testing.T) {
 	if err != nil {
 		t.Error("A IterativeChopType should exist")
 	}
+
+	_, err = GetChopMethod(FunctionalChopType)
+	if err != nil {
+		t.Error("A FunctionalChopType should exist")
+	}
+
+	_, err = GetChopMethod(SecondRecursiveChopType)
+	if err != nil {
+		t.Error("A SecondRecursiveChopType should exist")
+	}
+
+	_, err = GetChopMethod(SecondFunctionalChopType)
+	if err != nil {
+		t.Error("A SecondFunctionalChopType should exist")
+	}
 }

@@ -13,6 +13,8 @@ const (
 	FunctionalChopType = 3
 	// SecondRecursiveChopType used to identify SecondRecursiveChop method
 	SecondRecursiveChopType = 4
+	// SecondFunctionalChopType used to identify SecondFunctionalChop method
+	SecondFunctionalChopType = 5
 )
 
 // ChopMethod is used to find an the index of a number in a sorted array source
@@ -31,6 +33,8 @@ func GetChopMethod(method int) (ChopMethod, error) {
 		return new(FunctionalChop), nil
 	case SecondRecursiveChopType:
 		return new(SecondRecursiveChop), nil
+	case SecondFunctionalChopType:
+		return new(SecondFunctionalChop), nil
 	default:
 		return nil, fmt.Errorf("This ChopMethod is not supported")
 	}
