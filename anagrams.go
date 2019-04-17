@@ -10,7 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const defaultInput = "./inputanagrams.txt"
+const defaultInput = "./example_files/kata_anagrams.txt"
+
+var inputFileAnagrams string
 
 var anagramsCmd = &cobra.Command{
 	Use:   "anagrams",
@@ -18,10 +20,8 @@ var anagramsCmd = &cobra.Command{
 	RunE:  startAnagrams,
 }
 
-var inputFile string
-
 func init() {
-	anagramsCmd.Flags().StringVarP(&inputFile, "input", "i", defaultInput, "Input File")
+	anagramsCmd.Flags().StringVarP(&inputFileAnagrams, "file", "f", defaultInput, "Input File")
 	kata.AddCommand(anagramsCmd)
 }
 
@@ -29,10 +29,10 @@ func startAnagrams(cmd *cobra.Command, args []string) error {
 	store := anagrams.NewSizeDispatcher(new(anagrams.LenExtractor), new(common.WordCleaner))
 	feeder := new(common.FileReader)
 	printer := new(anagrams.LoggerPrinter)
-	file, err := os.OpenFile(inputFile, os.O_RDONLY, os.ModePerm)
+	file, err := os.OpenFile(inputFileAnagrams, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		log.Println(err)
-		return fmt.Errorf("Anagrams: Failed to open file %v", inputFile)
+		return fmt.Errorf("Anagrams: Failed to open file %v", inputFileAnagrams)
 	}
 	defer file.Close()
 	feeder.FeedFromFile(file, store.Add)

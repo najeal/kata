@@ -11,7 +11,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const defaultChainsInput = "./inputchains.txt"
+const defaultChainsInput = "./example_files/wordlist.txt"
+
+var inputFileChains string
 
 var chainsCmd = &cobra.Command{
 	Use:   "chains",
@@ -19,16 +21,15 @@ var chainsCmd = &cobra.Command{
 	RunE:  startChain,
 }
 
-var inputChainsFile string
-
 func init() {
-	chainsCmd.Flags().StringVarP(&inputChainsFile, "input", "i", defaultChainsInput, "Input File")
+	chainsCmd.Flags().StringVarP(&inputFileChains, "file", "f", defaultChainsInput, "Input File")
 	kata.AddCommand(chainsCmd)
 }
 
 func startChain(cmd *cobra.Command, args []string) error {
 	if len(args) != 2 {
 		log.Println("you should give 2 args: start word and end word")
+		return fmt.Errorf("not enough argument")
 	}
 	fileReader := common.NewFileReader()
 	store, err := chain.NewStore(args[0], args[1])
@@ -36,10 +37,10 @@ func startChain(cmd *cobra.Command, args []string) error {
 		log.Println(err)
 		return fmt.Errorf("failed to initiate word store")
 	}
-	file, err := os.OpenFile(inputChainsFile, os.O_RDONLY, os.ModePerm)
+	file, err := os.OpenFile(inputFileChains, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		log.Println(err)
-		return fmt.Errorf("Chains: Failed to open file %v", inputChainsFile)
+		return fmt.Errorf("Chains: Failed to open file %v", inputFileChains)
 	}
 	defer file.Close()
 	fileReader.FeedFromFile(file, store.Add)
