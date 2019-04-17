@@ -2,6 +2,8 @@ package anagrams
 
 import (
 	"fmt"
+
+	"github.com/najeal/kata/pkg/common"
 )
 
 // NewAnagramDispatcher return a new AnagramDispatcher instance
@@ -12,7 +14,7 @@ func NewAnagramDispatcher(sortExtractor StringExtractorMethod) *AnagramDispatche
 }
 
 // NewSizeDispatcher return a new SizeDispatcher instance
-func NewSizeDispatcher(sizeExtractor NumberExtractorMethod, wordCleander Cleaner) *SizeDispatcher {
+func NewSizeDispatcher(sizeExtractor NumberExtractorMethod, wordCleander common.Cleaner) *SizeDispatcher {
 	return &SizeDispatcher{
 		smap:          make(map[int]*AnagramDispatcher),
 		sizeExtractor: sizeExtractor,
@@ -49,7 +51,7 @@ type SizeDispatcher struct {
 	maxSet        []string
 	smap          map[int]*AnagramDispatcher
 	sizeExtractor NumberExtractorMethod
-	cleaner       Cleaner
+	cleaner       common.Cleaner
 }
 
 // Add insert word in corresponding AnagramDispatcher

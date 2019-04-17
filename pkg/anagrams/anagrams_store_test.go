@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/najeal/kata/pkg/common"
 )
 
 // TestAnagramDispatcher tests Add function of AnagramDispatcher
@@ -36,7 +38,7 @@ func TestAnagramDispatcher(t *testing.T) {
 
 // TestSizeDispatcher tests Add function of SizeDispatcher
 func TestSizeDispatcher(t *testing.T) {
-	sizeDispatcher := NewSizeDispatcher(new(LenExtractor), new(WordCleaner))
+	sizeDispatcher := NewSizeDispatcher(new(LenExtractor), new(common.WordCleaner))
 	if len(sizeDispatcher.maxSet) > 0 {
 		t.Errorf("longest set length should be 0")
 	}
@@ -69,7 +71,7 @@ func TestSizeDispatcher(t *testing.T) {
 
 // TestSizeDispatcherLongestAndMaxSize tests that longest anagram set and max word size are nicely stored
 func TestSizeDispatcherLongestAndMaxSize(t *testing.T) {
-	sizeDispatcher := NewSizeDispatcher(new(LenExtractor), new(WordCleaner))
+	sizeDispatcher := NewSizeDispatcher(new(LenExtractor), new(common.WordCleaner))
 	sizeDispatcher.Add("velo")
 	sizeDispatcher.Add("love")
 	sizeDispatcher.Add("lover")

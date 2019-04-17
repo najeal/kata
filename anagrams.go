@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/najeal/kata/pkg/anagrams"
+	"github.com/najeal/kata/pkg/common"
 	"github.com/spf13/cobra"
 )
 
@@ -25,8 +26,8 @@ func init() {
 }
 
 func startAnagrams(cmd *cobra.Command, args []string) error {
-	store := anagrams.NewSizeDispatcher(new(anagrams.LenExtractor), new(anagrams.WordCleaner))
-	feeder := new(anagrams.FileReader)
+	store := anagrams.NewSizeDispatcher(new(anagrams.LenExtractor), new(common.WordCleaner))
+	feeder := new(common.FileReader)
 	printer := new(anagrams.LoggerPrinter)
 	file, err := os.OpenFile(inputFile, os.O_RDONLY, os.ModePerm)
 	if err != nil {

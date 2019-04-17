@@ -1,9 +1,14 @@
-package anagrams
+package common
 
 import (
 	"bufio"
 	"os"
 )
+
+// NewFileReader returns new FileReader instance
+func NewFileReader() *FileReader {
+	return &FileReader{}
+}
 
 // FileReader reads files
 type FileReader struct{}

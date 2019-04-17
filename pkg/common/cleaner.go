@@ -1,4 +1,4 @@
-package anagrams
+package common
 
 const (
 	letterA = 65
@@ -10,6 +10,11 @@ const (
 // Cleaner is an interface to clean objects
 type Cleaner interface {
 	Clean(a string) string
+}
+
+// NewWordCleaner returns new WordCleaner instance
+func NewWordCleaner() *WordCleaner {
+	return &WordCleaner{}
 }
 
 // WordCleaner implements Cleaner interface to clean words

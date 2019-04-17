@@ -1,4 +1,4 @@
-package anagrams
+package common
 
 import (
 	"testing"
