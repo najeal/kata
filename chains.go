@@ -44,6 +44,10 @@ func startChain(cmd *cobra.Command, args []string) error {
 	}
 	defer file.Close()
 	fileReader.FeedFromFile(file, store.Add)
+	if store.AreReferencesIn() != true {
+		log.Println("At least one of your words is not in the dictionnary")
+		return fmt.Errorf("Cannot search chain")
+	}
 	graph := chain.NewMatrixGraph()
 	store.FeedGraph(graph)
 	res, err := graph.BFS(args[0], args[1])

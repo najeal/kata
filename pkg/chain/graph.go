@@ -69,6 +69,9 @@ func (g *MatrixGraph) BFS(source string, target string) ([]string, error) {
 			iterate = false
 		}
 	}
+	if len(chain) < 2 {
+		return nil, fmt.Errorf("Did not find chain")
+	}
 	// reverse chain
 	for i := len(chain)/2 - 1; i >= 0; i-- {
 		opp := len(chain) - 1 - i

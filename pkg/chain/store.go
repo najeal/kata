@@ -27,6 +27,8 @@ func NewStore(start, end string) (*Store, error) {
 type Store struct {
 	start       string
 	end         string
+	isInStart   bool
+	isInEnd     bool
 	length      int
 	maxDistance int
 	cleaner     common.Cleaner
@@ -44,9 +46,26 @@ func (s *Store) Add(word string) {
 	if err != nil {
 		return
 	}
+	s.saveReferenceWord(word)
 	s.saveGreater(distance)
 	s.insertMap(distance, word)
 	return
+}
+
+func (s *Store) saveReferenceWord(word string) {
+	if word == s.start {
+		s.isInStart = true
+	} else if word == s.end {
+		s.isInEnd = true
+	}
+}
+
+// AreReferencesIn checks if start and end words are in store
+func (s *Store) AreReferencesIn() bool {
+	if s.isInStart == true && s.isInEnd == true {
+		return true
+	}
+	return false
 }
 
 func (s *Store) saveGreater(distance int) {
