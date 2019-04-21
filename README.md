@@ -1,8 +1,18 @@
 # kata
 
+You can find exercises **Karate Chop**, **Anagrams** and **Word Chains**<br/>
+All given commands are assuming you are in root folder
+
+## run tests
+
+```go test -v ./...```
+
+## run benchmark for karatechop implementations
+
+```go test -bench=. ./pkg/karatechop```
+
 ## run somes examples
 
-All given commands are assuming you are in root folder
 
 Install kata
 
