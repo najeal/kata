@@ -1,6 +1,6 @@
 package anagrams
 
-import "log"
+import "fmt"
 
 // Printer is used to print
 type Printer interface {
@@ -15,10 +15,10 @@ type LoggerPrinter struct {
 
 // PrintAnagram prints string array
 func (cp *LoggerPrinter) PrintAnagram(an []string) {
-	log.Println(an)
+	fmt.Println(an)
 }
 
 // Print prints string
 func (cp *LoggerPrinter) Print(a string) {
-	log.Println(a)
+	fmt.Println(a)
 }

@@ -55,6 +55,6 @@ func startChain(cmd *cobra.Command, args []string) error {
 		log.Println(err)
 		return fmt.Errorf("Chains: BFS search failed")
 	}
-	log.Println(res)
+	fmt.Println(res)
 	return nil
 }

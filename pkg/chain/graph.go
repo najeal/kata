@@ -51,11 +51,9 @@ func (g *MatrixGraph) getChildrenFromParent(parent string) ([]string, bool) {
 	return []string{}, ok
 }
 
+// BFS searches shortest way in the graph from source to target
 func (g *MatrixGraph) BFS(source string, target string) ([]string, error) {
-	res, err := g.bfs(source, target)
-	if err != nil {
-		return nil, fmt.Errorf("Graph BFS: failed")
-	}
+	res := g.bfs(source, target)
 	iterate := true
 	chain := make([]string, 0)
 	parent := target
@@ -80,7 +78,7 @@ func (g *MatrixGraph) BFS(source string, target string) ([]string, error) {
 	return chain, nil
 }
 
-func (g *MatrixGraph) bfs(source string, target string) (map[string]string, error) {
+func (g *MatrixGraph) bfs(source string, target string) map[string]string {
 	parent := make(map[string]string)
 	visited := make(map[string]bool)
 	visited[source] = true
@@ -95,10 +93,10 @@ func (g *MatrixGraph) bfs(source string, target string) (map[string]string, erro
 				parent[child] = current.Value.(string)
 				queue.PushBack(child)
 				if child == target {
-					return parent, nil
+					return parent
 				}
 			}
 		}
 	}
-	return parent, nil
+	return parent
 }
