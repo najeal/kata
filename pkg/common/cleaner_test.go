@@ -2,35 +2,38 @@ package common
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWordCleaner(t *testing.T) {
-	wordToClean := "@te[as'asd{"
-	expectedWord := "teasasd"
-	wordCleaner := new(WordCleaner)
-	wordResult := wordCleaner.Clean(wordToClean)
-	if wordResult != expectedWord {
-		t.Errorf("Cleaned word %v is different from %v expected", wordResult, expectedWord)
+	tests := []struct {
+		name           string
+		input          string
+		expectedOutput string
+	}{
+		{
+			"delete special keys",
+			"@te[as'asd{",
+			"teasasd",
+		},
+		{
+			"delete spaces",
+			"the Morse code",
+			"themorsecode",
+		},
+		{
+			"upper to lower cases",
+			"ABCD",
+			"abcd",
+		},
 	}
 
-	wordToClean = "interlink's"
-	expectedWord = "interlinks"
-	wordResult = wordCleaner.Clean(wordToClean)
-	if wordResult != expectedWord {
-		t.Errorf("Cleaned word %v is different from %v expected", wordResult, expectedWord)
-	}
-
-	wordToClean = "the Morse code"
-	expectedWord = "themorsecode"
-	wordResult = wordCleaner.Clean(wordToClean)
-	if wordResult != expectedWord {
-		t.Errorf("Cleaned word %v is different from %v expected", wordResult, expectedWord)
-	}
-
-	wordToClean = "Here come dots"
-	expectedWord = "herecomedots"
-	wordResult = wordCleaner.Clean(wordToClean)
-	if wordResult != expectedWord {
-		t.Errorf("Cleaned word %v is different from %v expected", wordResult, expectedWord)
+	for _, utest := range tests {
+		t.Run(utest.name, func(t *testing.T) {
+			wordCleaner := new(WordCleaner)
+			wordResult := wordCleaner.Clean(utest.input)
+			assert.Equal(t, utest.expectedOutput, wordResult)
+		})
 	}
 }

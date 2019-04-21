@@ -1,9 +1,9 @@
 package anagrams
 
 import (
-	"reflect"
-	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/najeal/kata/pkg/common"
 )
@@ -12,61 +12,35 @@ import (
 func TestAnagramDispatcher(t *testing.T) {
 	anDispatcher := NewAnagramDispatcher(new(SortExtractor))
 	set := anDispatcher.Add("velo", "velo")
-	if len(set) != 1 {
-		t.Errorf("first call anagram add: set length should be 1")
-	} else {
-		if strings.Compare(set[0], "velo") != 0 {
-			t.Errorf("first call anagram add: first elem should be velo but is %v", set[0])
-		}
-	}
+	assert.Equal(t, 1, len(set))
+	assert.Equal(t, "velo", set[0])
+
 	set = anDispatcher.Add("love", "love")
-	if len(set) != 2 {
-		t.Errorf("second call anagram add: set length should be 2")
-	} else {
-		if strings.Compare(set[0], "velo") != 0 {
-			t.Errorf("second call anagram add: first elem should be velo but is %v", set[0])
-		}
-		if strings.Compare(set[1], "love") != 0 {
-			t.Errorf("second call anagram add: second elem should be love but is %v", set[0])
-		}
-	}
-	anagramsCount := len(anDispatcher.wmap)
-	if anagramsCount != 1 {
-		t.Errorf("anagram count should be 1 but is %v", anagramsCount)
-	}
+	assert.Equal(t, 2, len(set))
+	assert.Equal(t, "velo", set[0])
+	assert.Equal(t, "love", set[1])
+
+	assert.Equal(t, 1, len(anDispatcher.wmap))
 }
 
 // TestSizeDispatcher tests Add function of SizeDispatcher
 func TestSizeDispatcher(t *testing.T) {
 	sizeDispatcher := NewSizeDispatcher(new(LenExtractor), new(common.WordCleaner))
-	if len(sizeDispatcher.maxSet) > 0 {
-		t.Errorf("longest set length should be 0")
-	}
-	if sizeDispatcher.maxSize > 0 {
-		t.Errorf("longest word should be 0")
-	}
+	assert.Equal(t, 0, len(sizeDispatcher.maxSet))
+	assert.Equal(t, 0, sizeDispatcher.maxSize)
+
 	sizeDispatcher.Add("velo")
-	differentSizesCount := len(sizeDispatcher.smap)
-	if differentSizesCount != 1 {
-		t.Errorf("size count should be 1 but is %v", differentSizesCount)
-	}
+	assert.Equal(t, 1, len(sizeDispatcher.smap))
+
 	sizeDispatcher.Add("love")
-	differentSizesCount = len(sizeDispatcher.smap)
-	if differentSizesCount != 1 {
-		t.Errorf("size count should be 1 but is %v", differentSizesCount)
-	}
+	assert.Equal(t, 1, len(sizeDispatcher.smap))
+
 	sizeDispatcher.Add("lover")
-	differentSizesCount = len(sizeDispatcher.smap)
-	if differentSizesCount != 2 {
-		t.Errorf("size count should be 2 but is %v", differentSizesCount)
-	}
+	assert.Equal(t, 2, len(sizeDispatcher.smap))
 
 	sizeDispatcher.Add("the Morse code")
 	sizeDispatcher.Add("Here come dots")
-	differentSizesCount = len(sizeDispatcher.smap)
-	if differentSizesCount != 3 {
-		t.Errorf("size count should be 3 but is %v", differentSizesCount)
-	}
+	assert.Equal(t, 3, len(sizeDispatcher.smap))
 }
 
 // TestSizeDispatcherLongestAndMaxSize tests that longest anagram set and max word size are nicely stored
@@ -76,39 +50,23 @@ func TestSizeDispatcherLongestAndMaxSize(t *testing.T) {
 	sizeDispatcher.Add("love")
 	sizeDispatcher.Add("lover")
 	expectedLongest := []string{"velo", "love"}
-	if reflect.DeepEqual(sizeDispatcher.maxSet, expectedLongest) != true {
-		t.Errorf("longest is %v whereas we should have %v", sizeDispatcher.maxSet, expectedLongest)
-	}
+	assert.Equal(t, expectedLongest, sizeDispatcher.maxSet)
+
 	sizeDispatcher.Add("rlove")
-	if reflect.DeepEqual(sizeDispatcher.maxSet, expectedLongest) != true {
-		t.Errorf("longest is %v whereas we should have %v", sizeDispatcher.maxSet, expectedLongest)
-	}
+	assert.Equal(t, expectedLongest, sizeDispatcher.maxSet)
+
 	sizeDispatcher.Add("lrove")
 	expectedLongest = []string{"lover", "rlove", "lrove"}
-	if reflect.DeepEqual(sizeDispatcher.maxSet, expectedLongest) != true {
-		t.Errorf("longest is %v whereas we should have %v", sizeDispatcher.maxSet, expectedLongest)
-	}
-	maxSize := sizeDispatcher.maxSize
-	expectedMaxSize := 5
-	if maxSize != expectedMaxSize {
-		t.Errorf("longest word length is %v but should be %v", maxSize, expectedMaxSize)
-	}
+	assert.Equal(t, expectedLongest, sizeDispatcher.maxSet)
+
+	assert.Equal(t, 5, sizeDispatcher.maxSize)
+
 	sizeDispatcher.Add("unpolitic")
-	maxSize = sizeDispatcher.maxSize
-	expectedMaxSize = 9
-	if maxSize != expectedMaxSize {
-		t.Errorf("longest word length is %v but should be %v", maxSize, expectedMaxSize)
-	}
+	assert.Equal(t, 9, sizeDispatcher.maxSize)
 
 	expectedLongest = []string{"lover", "rlove", "lrove"}
-	if reflect.DeepEqual(sizeDispatcher.maxSet, expectedLongest) != true {
-		t.Errorf("longest is %v whereas we should have %v", sizeDispatcher.maxSet, expectedLongest)
-	}
+	assert.Equal(t, expectedLongest, sizeDispatcher.maxSet)
 
 	sizeDispatcher.Add("the Morse code")
-	maxSize = sizeDispatcher.maxSize
-	expectedMaxSize = 12
-	if maxSize != expectedMaxSize {
-		t.Errorf("longest word length is %v but should be %v", maxSize, expectedMaxSize)
-	}
+	assert.Equal(t, 12, sizeDispatcher.maxSize)
 }

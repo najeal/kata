@@ -2,37 +2,74 @@ package chain
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestSet(t *testing.T) {
-	set := NewSet()
-	if set == nil {
-		t.Errorf("Set created by NewSet function should not be nil, but it is")
+func TestSetIsIn(t *testing.T) {
+	tests := []struct {
+		name     string
+		setInit  map[string]bool
+		search   string
+		expected bool
+	}{
+		{
+			"should be present",
+			map[string]bool{"work": true},
+			"work",
+			true,
+		},
+		{
+			"should not be present",
+			map[string]bool{"work": true},
+			"newwork",
+			false,
+		},
 	}
-	set.Add("work")
-	set.Add("work")
 
-	if true == set.IsIn("newway") {
-		t.Errorf("Set IsIn newway should return false")
+	for _, utest := range tests {
+		t.Run(utest.name, func(t *testing.T) {
+			set := &Set{set: utest.setInit}
+			res := set.IsIn(utest.search)
+			assert.Equal(t, utest.expected, res)
+		})
+	}
+}
+
+func TestSetAddAndGetValues(t *testing.T) {
+	tests := []struct {
+		name        string
+		add         []string
+		expectedLen int
+	}{
+		{
+			"add one",
+			[]string{"work"},
+			1,
+		},
+		{
+			"add two",
+			[]string{"work", "newwork"},
+			2,
+		},
+		{
+			"add three",
+			[]string{"work", "newwork", "withoutwork"},
+			3,
+		},
 	}
 
-	if false == set.IsIn("work") {
-		t.Errorf("Set IsIn work should return true")
-	}
-
-	set.Add("newway")
-
-	if false == set.IsIn("newway") {
-		t.Errorf("Set IsIn newway should return true")
-	}
-
-	values := set.GetValues()
-	length := len(values)
-	if length != 2 {
-		t.Errorf("Set GetValues should return only 2 values but returned %v", length)
-	} else {
-		if false == (values[0] == "work" && values[1] == "newway" || values[0] == "newway" && values[1] == "work") {
-			t.Errorf("values returned by Set GetValues are incorrects: %v", values)
-		}
+	for _, utest := range tests {
+		t.Run(utest.name, func(t *testing.T) {
+			set := NewSet()
+			for _, elem := range utest.add {
+				set.Add(elem)
+				isIn := set.IsIn(elem)
+				assert.Equal(t, true, isIn)
+			}
+			assert.Equal(t, utest.expectedLen, len(set.set))
+			values := set.GetValues()
+			assert.ElementsMatch(t, utest.add, values)
+		})
 	}
 }

@@ -1,45 +1,49 @@
 package anagrams
 
 import (
-	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSortWord(t *testing.T) {
-	sExtractor := new(SortExtractor)
-	errorMessage := "sorted word %v got is different to %v"
-	word := "cowboy"
-	expectedWord := "bcoowy"
-	res := sExtractor.KeyFrom(word)
-	if 0 != strings.Compare(res, expectedWord) {
-		t.Errorf(errorMessage, res, expectedWord)
+	tests := []struct {
+		name     string
+		word     string
+		expected string
+	}{
+		{
+			"normal word",
+			"cowboy",
+			"bcoowy",
+		},
+		{
+			"long word 1",
+			"themorsecode",
+			"cdeeehmoorst",
+		},
+		{
+			"long word 2",
+			"herecomedots",
+			"cdeeehmoorst",
+		},
+		{
+			"one letter",
+			"c",
+			"c",
+		},
+		{
+			"two letters",
+			"ca",
+			"ac",
+		},
 	}
 
-	word = "c"
-	expectedWord = "c"
-	res = sExtractor.KeyFrom(word)
-	if 0 != strings.Compare(res, expectedWord) {
-		t.Errorf(errorMessage, res, expectedWord)
-	}
-
-	word = "ca"
-	expectedWord = "ac"
-	res = sExtractor.KeyFrom(word)
-	if 0 != strings.Compare(res, expectedWord) {
-		t.Errorf(errorMessage, res, expectedWord)
-	}
-
-	word = "themorsecode"
-	expectedWord = "cdeeehmoorst"
-	res = sExtractor.KeyFrom(word)
-	if 0 != strings.Compare(res, expectedWord) {
-		t.Errorf(errorMessage, res, expectedWord)
-	}
-
-	word = "herecomedots"
-	expectedWord = "cdeeehmoorst"
-	res = sExtractor.KeyFrom(word)
-	if 0 != strings.Compare(res, expectedWord) {
-		t.Errorf(errorMessage, res, expectedWord)
+	for _, utest := range tests {
+		t.Run(utest.name, func(t *testing.T) {
+			sExtractor := new(SortExtractor)
+			res := sExtractor.KeyFrom(utest.word)
+			assert.Equal(t, utest.expected, res)
+		})
 	}
 }

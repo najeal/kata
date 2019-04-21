@@ -1,47 +1,63 @@
 package chain
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWordDistancer(t *testing.T) {
-	distancer := new(WordDistancer)
-
-	dist, err := distancer.findDistance("a", "")
-	if err == nil {
-		t.Errorf("different word length should return error")
+	tests := []struct {
+		name         string
+		wordA        string
+		wordB        string
+		expectedErr  error
+		expectedDist int
+	}{
+		{
+			"not same length",
+			"a",
+			"",
+			fmt.Errorf("Cannot search distance for different word sizes"),
+			0,
+		},
+		{
+			"same empty",
+			"",
+			"",
+			nil,
+			0,
+		},
+		{
+			"one letter length dist 1",
+			"a",
+			"c",
+			nil,
+			1,
+		},
+		{
+			"four letter length dist 1",
+			"abct",
+			"cbct",
+			nil,
+			1,
+		},
+		{
+			"four letter length dist 3",
+			"bcat",
+			"cbct",
+			nil,
+			3,
+		},
 	}
 
-	dist, err = distancer.findDistance("", "")
-	if err != nil {
-		t.Errorf("empties word should not return error")
+	for _, utest := range tests {
+		t.Run(utest.name, func(t *testing.T) {
+			distancer := new(WordDistancer)
+			dist, err := distancer.findDistance(utest.wordA, utest.wordB)
+			assert.Equal(t, utest.expectedErr, err)
+			assert.Equal(t, utest.expectedDist, dist)
+		})
 	}
-	if dist != 0 {
-		t.Errorf("dist is %v but should be 0", dist)
-	}
-
-	dist, err = distancer.findDistance("a", "c")
-	if err != nil {
-		t.Errorf("empties word should not return error")
-	}
-	if dist != 1 {
-		t.Errorf("dist is %v but should be 1", dist)
-	}
-
-	dist, err = distancer.findDistance("abct", "cbct")
-	if err != nil {
-		t.Errorf("empties word should not return error")
-	}
-	if dist != 1 {
-		t.Errorf("dist is %v but should be 1", dist)
-	}
-
-	dist, err = distancer.findDistance("bcat", "cbct")
-	if err != nil {
-		t.Errorf("empties word should not return error")
-	}
-	if dist != 3 {
-		t.Errorf("dist is %v but should be 3", dist)
-	}
-
 }
